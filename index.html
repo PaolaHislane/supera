@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supera Correspondente Bancário</title>
+    <style>
+        :root {
+            --primary-color: #003366; /* Azul Caixa */
+            --secondary-color: #f8f9fa;
+            --accent-color: #ff6600; /* Laranja Caixa */
+            --text-color: #333333;
+            --light-text: #ffffff;
+            --caixa-blue-dark: #002244;
+            --caixa-blue-light: #004488;
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--caixa-blue-dark));
+            --gradient-accent: linear-gradient(135deg, var(--accent-color), #e65c00);
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+            background: linear-gradient(180deg, #f5f7fa 0%, #e4e8ed 100%);
+        }
+        
+        .header-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--gradient-primary);
+            padding: 20px 0 15px 0;
+        }
+        
+        .header-logo {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .header-logo img {
+            height: 120px; /* Tamanho aumentado */
+            width: auto;
+            max-width: 100%;
+        }
+        
+        .main-header {
+            background: linear-gradient(to right, var(--caixa-blue-dark), var(--primary-color));
+            color: var(--light-text);
+            padding: 15px 0;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 34, 68, 0.2);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+        
+        .services {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin: 30px 0;
+            gap: 20px;
+        }
+        
+        .service-card {
+            flex: 1 1 300px;
+            background: linear-gradient(135deg, var(--primary-color), var(--caixa-blue-light));
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            color: white;
+            transition: transform 0.3s, box-shadow 0.3s;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+            transition: all 0.5s ease;
+        }
+        
+        .service-card:hover::before {
+            transform: rotate(30deg) translate(20px, 20px);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .service-card h3 {
+            color: var(--light-text);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 1.5rem;
+            position: relative;
+        }
+        
+        .service-card p {
+            flex-grow: 1;
+            position: relative;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--gradient-accent);
+            color: var(--light-text);
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s, transform 0.2s;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 8px rgba(255, 102, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e65c00, var(--accent-color));
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, #e65c00, var(--accent-color));
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(255, 102, 0, 0.4);
+        }
+        
+        .btn:hover::after {
+            opacity: 1;
+        }
+        
+        .address {
+            background: var(--gradient-primary);
+            padding: 30px;
+            text-align: center;
+            margin: 40px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 34, 68, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .address::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%);
+            pointer-events: none;
+        }
+        
+        .address iframe {
+            border: 0;
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 85%;
+            max-width: 900px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .close {
+            color: #aaa;
+            position: absolute;
+            right: 25px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close:hover {
+            color: var(--primary-color);
+        }
+        
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: #f8f9fa;
+        }
+        
+        .form-group input:focus, 
+        .form-group select:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.2);
+            outline: none;
+            background-color: white;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 380px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: none;
+            z-index: 1000;
+            background-color: white;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .chat-header {
+            background: linear-gradient(to right, var(--primary-color), var(--caixa-blue-light));
+            color: var(--light-text);
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-body {
+            background-color: white;
+            height: 350px;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+        
+        .chat-message.bot {
+            background-color: #f1f1f1;
+            align-self: flex-start;
+            border-top-left-radius: 0;
+        }
+        
+        .chat-message.user {
+            background-color: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+            border-top-right-radius: 0;
+        }
+        
+        .chat-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .chat-option {
+            background: linear-gradient(90deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .chat-option:hover {
+            background: linear-gradient(90deg, #e9ecef 0%, #ffffff 100%);
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .footer-logo {
+            background: var(--gradient-primary);
+            padding: 20px 0;
+            text-align: center;
+        }
+        
+        .footer-logo img {
+            max-height: 120px;
+        }
+        
+        footer {
+            background: var(--gradient-primary);
+            color: var(--light-text);
+            text-align: center;
+            padding: 25px 0;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .footer-section {
+            flex: 1 1 300px;
+            margin: 15px;
+            text-align: left;
+        }
+        
+        .footer-section h3 {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+        
+        /* Efeitos de hover para seções */
+        .footer-section:hover h3 {
+            color: var(--accent-color);
+        }
+        
+        /* Animação para os cards de serviço */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .service-card {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+        
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.2s; }
+        .service-card:nth-child(3) { animation-delay: 0.3s; }
+        
+        /* Degradê especial para o container principal */
+        .container:first-of-type {
+            background: linear-gradient(180deg, rgba(248, 249, 250, 0.9) 0%, rgba(255, 255, 255, 1) 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: -20px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 30px rgba(0, 51, 102, 0.1);
+        }
+        
+        /* Efeito de brilho nos botões */
+        .btn:hover {
+            filter: brightness(1.1);
+        }
+        
+        /* Borda degradê para o modal */
+        .modal-content {
+            border-top: 5px solid;
+            border-image: linear-gradient(90deg, var(--primary-color), var(--accent-color)) 1;
+        }
+        
+        /* Estilo para o campo de atendimento */
+        .atendimento-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #25D366;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .whatsapp-btn i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        /* Estilo para o chat-trigger */
+        .chat-trigger {
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .service-card {
+                flex-basis: 100%;
+            }
+            
+            form {
+                grid-template-columns: 1fr;
+            }
+            
+            .chat-container {
+                width: 90%;
+                right: 5%;
+                bottom: 10px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 20px 15px;
+            }
+            
+            .header-logo img {
+                height: 100px;
+            }
+            
+            .container:first-of-type {
+                margin-top: 0;
+                padding: 20px 15px;
+            }
+            
+            .atendimento-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <!-- Adicionando ícones do Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+        
+        <header class="main-header">
+            <div class="container">
+                <div class="header-logo">
+                    <img src="/logo.png" alt="Logo Supera">
+                </div>
+            </div>
+        </header>
+    </div>
+    
+    <div class="container">
+        <div class="services">
+            <div class="service-card">
+                <h3>Lista de Documentos</h3>
+                <p>Confira todos os documentos necessários para aprovação do seu financiamento imobiliário.</p>
+                <a href="#" class="btn" id="documentsBtn">Ver Documentos</a>
+            </div>
+            
+            <div class="service-card">
+                <h3>Simulação</h3>
+                <p>Preencha nosso formulário para simular seu financiamento imobiliário e descubra as melhores condições.</p>
+                <a href="#" class="btn" id="simulationBtn">Iniciar Simulação</a>
+            </div>
+            
+            <div class="service-card chat-trigger" id="chatTrigger">
+                <h3>Assistente Virtual</h3>
+                <p>Tire suas dúvidas sobre financiamento imobiliário com nosso assistente virtual especializado.</p>
+                <a href="#" class="btn" id="chatBtn">Conversar Agora</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="address">
+        <div class="container">
+            <h2>Nossa Localização</h2>
+            <h3>Supera Correspondente Bancário</h3>
+            <p>SIA Trecho 3 Ed.AC Coelho lote 1010 a 1050 Loja 204 - Guará, Brasília - DF, 71200-020</p>
+            
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3839.092372480773!2d-47.9188409246876!3d-15.799722422980712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935a3a8f2c9b8a0f%3A0x1c3c3b3b3b3b3b3b!2sSIA%20Trecho%203%20Ed.AC%20Coelho%20lote%201010%20a%201050%20Loja%20204%20-%20Guar%C3%A1%2C%20Bras%C3%ADlia%20-%20DF%2C%2071200-020!5e0!3m2!1spt-BR!2sbr!4v1620000000000!5m2!1spt-BR!2sbr" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h2>Atendimento</h2>
+        <p><strong>Horário de Funcionamento:</strong> Segunda a Sexta: 09h às 18h</p>
+        <div class="atendimento-buttons">
+            <a href="https://wa.me/5561991427633" class="whatsapp-btn" target="_blank">
+                <i class="fab fa-whatsapp"></i> Gerente Renan
+            </a>
+            <a href="https://wa.me/556192781149" class="whatsapp-btn" target="_blank">
+                <i class="fab fa-whatsapp"></i> Gerente Windson
+            </a>
+        </div>
+    </div>
+    
+    <!-- Modal Documentos -->
+    <div id="documentsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Documentos Necessários para Aprovação</h2>
+            
+            <h3>Documentos Pessoais Básicos</h3>
+            <ol>
+                <li>
+                    <strong>Documentos de Identificação (Proponente e Cônjuge)</strong>
+                    <ul>
+                        <li>RG (Carteira de Identidade)</li>
+                        <li>CPF (caso não conste no RG)</li>
+                        <li>CNH (opcional)</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Estado Civil</strong>
+                    <ul>
+                        <li>Certidão de Nascimento</li>
+                        <li>Certidão de Casamento (incluir pacto antenupcial se regime diferente de comunhão parcial)</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Residência</strong>
+                    <ul>
+                        <li>Comprovante recente em nome do comprador (frente/verso)</li>
+                        <li>Aceitos: contas de água, luz, TV, telefone, fatura de cartão com data de postagem</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h3>Comprovação de Renda (escolher uma opção)</h3>
+            
+            <h4>OPÇÃO 1 - ASSALARIADOS</h4>
+            <ul>
+                <li>2 últimos contracheques (sem 13º ou férias)</li>
+                <li>Número do PIS</li>
+            </ul>
+            
+            <h4>OPÇÃO 2 - DECLARAÇÃO IR</h4>
+            <ul>
+                <li>IRPF completo com recibo</li>
+                <li>Retificadora (se houver)</li>
+                <li>Extratos bancários últimos 6 meses (exceto CEF)</li>
+            </ul>
+            
+            <h4>OPÇÃO 3 - RENDA DE ALUGUEL</h4>
+            <ul>
+                <li>Contrato da locação + 3 últimos recibos</li>
+                <li>Certidão de Matrícula do imóvel</li>
+            </ul>
+            
+            <h4>OPÇÃO 4 - APOSENTADOS</h4>
+            <ul>
+                <li>Extrato de pagamento do benefício</li>
+            </ul>
+            
+            <h4>OPÇÃO 5 - EMPRESÁRIOS</h4>
+            <ul>
+                <li>Contrato Social/Requerimento (com alterações)</li>
+                <li>Pró-labore atual</li>
+                <li>DIRPF (rendimentos/distribuição lucros)</li>
+                <li>Extratos bancários últimos 6 meses (exceto CEF)</li>
+            </ul>
+            
+            <h4>OPÇÃO 6 - RENDA INFORMAL</h4>
+            <ul>
+                <li>Extratos bancários últimos 6 meses</li>
+                <li>Faturas cartão crédito últimos 6 meses</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Modal Simulação -->
+    <div id="simulationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Simulação de Financiamento</h2>
+            
+            <form id="simulationForm">
+                <div class="form-group">
+                    <label for="fullName">Nome Completo</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="maritalStatus">Estado Civil</label>
+                    <select id="maritalStatus" name="maritalStatus" required>
+                        <option value="">Selecione uma opção</option>
+                        <option value="solteiro">Solteiro(a)</option>
+                        <option value="casado">Casado(a)</option>
+                        <option value="divorciado">Divorciado(a)</option>
+                        <option value="viuvo">Viúvo(a)</option>
+                        <option value="uniao_estavel">União Estável</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="moreBuyers">Possui mais de um comprador na proposta e/ou dependentes?</label>
+                    <select id="moreBuyers" required>
+                        <option value="">Selecione uma opção</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Não</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="firstProperty">É o primeiro imóvel?</label>
+                    <select id="firstProperty" required>
+                        <option value="">Selecione uma opção</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Não</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="publicServant">É servidor público?</label>
+                    <select id="publicServant" required>
+                        <option value="">Selecione uma opção</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Não</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyLocation">Localização do Imóvel</label>
+                    <select id="propertyLocation" required>
+                        <option value="">Selecione uma opção</option>
+                        <option value="df">Distrito Federal</option>
+                        <option value="go">Goiás</option>
+                        <option value="outro">Outro Estado</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="hasBroker">Possui Corretor?</label>
+                    <select id="hasBroker" required>
+                        <option value="">Selecione uma opção</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Não</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="hasFGTS">Tem mais de 36 meses de FGTS?</label>
+                    <select id="hasFGTS" required>
+                        <option value="">Selecione uma opção</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Não</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyType">Tipo do Imóvel</label>
+                    <select id="propertyType" required>
+                        <option value="">Selecione uma opção</option>
+                        <option value="novo">Novo</option>
+                        <option value="usado">Usado</option>
+                        <option value="construcao">Construção em Terreno Próprio</option>
+                        <option value="terreno_construcao">Aquisição de terreno e construção</option>
+                        <option value="lote">Aquisição de Lote</option>
+                        <option value="credito_garantia">Crédito com Garantia de Imóvel</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyValue">Valor do Imóvel</label>
+                    <input type="text" id="propertyValue" name="propertyValue" class="currency-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="financingValue">Valor do financiamento que deseja</label>
+                    <input type="text" id="financingValue" name="financingValue" class="currency-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="familyIncome">Renda Familiar</label>
+                    <input type="text" id="familyIncome" name="familyIncome" class="currency-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="birthDate">Data de Nascimento</label>
+                    <input type="date" id="birthDate" name="birthDate" required placeholder="DD/MM/AAAA">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Telefone de Contato</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="(00) 00000-0000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group full-width">
+                    <button type="button" class="btn" onclick="sendSimulation('5561991427633')">Enviar para Renan</button>
+                    <button type="button" class="btn" onclick="sendSimulation('556192781149')" style="margin-left: 10px;">Enviar para Windson</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Chat Assistant -->
+    <div id="chatContainer" class="chat-container">
+        <div class="chat-header" id="chatHeader">
+            <h3>Assistente Virtual</h3>
+            <span id="closeChat" style="font-size: 20px;">×</span>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-message bot">
+                <p>Olá! Sou o assistente virtual da Supera. Como posso ajudar você hoje com informações sobre financiamento imobiliário?</p>
+            </div>
+            <div class="chat-message bot">
+                <p>Selecione um tópico para saber mais:</p>
+            </div>
+            
+            <div class="chat-options">
+                <div class="chat-option" onclick="selectChatOption('Sistemas de amortização (SAC e PRICE)')">Sistemas de amortização (SAC e PRICE)</div>
+                <div class="chat-option" onclick="selectChatOption('Programas de financiamento disponíveis')">Programas de financiamento disponíveis</div>
+                <div class="chat-option" onclick="selectChatOption('Uso do FGTS no financiamento')">Uso do FGTS no financiamento</div>
+                <div class="chat-option" onclick="selectChatOption('Taxas de juros atuais')">Taxas de juros atuais</div>
+                <div class="chat-option" onclick="selectChatOption('Documentação necessária')">Documentação necessária</div>
+                <div class="chat-option" onclick="selectChatOption('Prazos de aprovação')">Prazos de aprovação</div>
+                <div class="chat-option" onclick="selectChatOption('Requisitos para aprovação')">Requisitos para aprovação</div>
+                <div class="chat-option" onclick="selectChatOption('Financiamento para construção')">Financiamento para construção</div>
+                <div class="chat-option" onclick="selectChatOption('Comprovação de renda')">Comprovação de renda</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-logo">
+        <img src="/logo.png" alt="Logo Caixa Econômica Federal" style="height: 120px;">
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            
+            <div class="footer-section">
+
+            </div>
+        </div>
+        
+        <div class="container" style="margin-top: 20px;">
+            <p>&copy; 2025 Supera Correspondente Bancário - Todos os direitos reservados</p>
+            <p>Correspondente autorizado</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Modal functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const documentsBtn = document.getElementById('documentsBtn');
+            const simulationBtn = document.getElementById('simulationBtn');
+            const chatBtn = document.getElementById('chatBtn');
+            const chatTrigger = document.getElementById('chatTrigger');
+            
+            const documentsModal = document.getElementById('documentsModal');
+            const simulationModal = document.getElementById('simulationModal');
+            const chatContainer = document.getElementById('chatContainer');
+            
+            const closeButtons = document.getElementsByClassName('close');
+            const closeChat = document.getElementById('closeChat');
+            
+            // Adicionando eventos de clique
+            documentsBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                documentsModal.style.display = 'block';
+            });
+            
+            simulationBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                simulationModal.style.display = 'block';
+            });
+            
+            // Mostrar chat apenas quando clicar no card ou botão do assistente virtual
+            chatTrigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                chatContainer.style.display = 'block';
+            });
+            
+            chatBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                chatContainer.style.display = 'block';
+            });
+            
+            // Fechar chat quando clicar no X
+            closeChat.addEventListener('click', function() {
+                chatContainer.style.display = 'none';
+            });
+            
+            // Fechar modais quando clicar no X
+            for (let i = 0; i < closeButtons.length; i++) {
+                closeButtons[i].addEventListener('click', function() {
+                    documentsModal.style.display = 'none';
+                    simulationModal.style.display = 'none';
+                });
+            }
+            
+            // Fechar modais quando clicar fora
+            window.addEventListener('click', function(event) {
+                if (event.target == documentsModal) {
+                    documentsModal.style.display = 'none';
+                }
+                if (event.target == simulationModal) {
+                    simulationModal.style.display = 'none';
+                }
+            });
+            
+            // Phone mask
+            document.getElementById('phone').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                
+                if (value.length > 0) {
+                    value = value.match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
+                    e.target.value = !value[2] ? value[1] : '(' + value[1] + ') ' + value[2] + (value[3] ? '-' + value[3] : '');
+                }
+            });
+        });
+        
+        // Chat functionality
+        function selectChatOption(option) {
+            const chatBody = document.getElementById('chatBody');
+            
+            // Add user message
+            const userMessage = document.createElement('div');
+            userMessage.className = 'chat-message user';
+            userMessage.innerHTML = `<p><strong>Você:</strong> ${option}</p>`;
+            chatBody.appendChild(userMessage);
+            
+            // Add bot response
+            const botMessage = document.createElement('div');
+            botMessage.className = 'chat-message bot';
+            botMessage.innerHTML = `<p><strong>Assistente:</strong> ${getChatResponse(option)}</p>`;
+            chatBody.appendChild(botMessage);
+            
+            // Scroll to bottom
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        
+        function getChatResponse(option) {
+            // This would be replaced with actual responses or API calls in a real implementation
+            const responses = {
+                'Sistemas de amortização (SAC e PRICE)': 'O sistema SAC (Sistema de Amortização Constante) mantém parcelas decrescentes ao longo do tempo, enquanto o PRICE (Sistema Francês) mantém parcelas constantes. O SAC costuma ser mais vantajoso a longo prazo, com menor valor total pago.',
+                'Programas de financiamento disponíveis': 'A Caixa oferece vários programas como Minha Casa Minha Vida (faixas 1, 2, 3 e 4), SBPE, financiamento para construção e Terreno. Cada programa tem requisitos específicos de renda e valor do imóvel.',
+                'Uso do FGTS no financiamento': 'Você pode usar o FGTS para entrada do financiamento (desde que tenha no mínimo 36 meses de contribuição) ou para amortizar o saldo devedor.',
+                'Taxas de juros atuais': 'As taxas variam conforme o programa e perfil do cliente. Atualmente variam entre 8,5% a.a. (Minha Casa Minha Vida) e 10,5% a.a. (convencional). Taxas especiais para servidores públicos e profissionais específicos.',
+                'Documentação necessária': 'Os documentos básicos incluem RG, CPF, comprovante de residência e comprovante de renda adequado ao seu perfil (contracheques, declaração de IR, etc.). Consulte nossa lista completa na seção "Documentos" do site.',
+                'Prazos de aprovação': 'O prazo médio é de 1 dia útil após a entrega completa da documentação. A análise de crédito considera sua renda, score e histórico financeiro.',
+                'Requisitos para aprovação': 'Os principais requisitos são: renda compatível (parcela até 30% da renda), bom histórico creditício, documentação completa e imóvel dentro das normas da Caixa. Idade mínima 18 e máxima 75 anos na data final do contrato.',
+                'Financiamento para construção': 'Para construção, além dos documentos habituais, é necessário apresentar projeto aprovado na prefeitura, ART do responsável técnico e memorial descritivo. O valor é liberado em etapas conforme o andamento da obra.',
+                'Comprovação de renda': 'Assalariados: 3 últimos contracheques e holerite. Autônomos: declaração de IR ou extratos bancários. Empresários: contrato social, pró-labore e DIRPF. Aposentados: extrato do INSS. Cada caso tem requisitos específicos.'
+            };
+            
+            return responses[option] || 'Desculpe, não entendi sua solicitação. Por favor, selecione uma das opções disponíveis ou reformule sua pergunta.';
+        }
+        
+        // Function to format currency in Brazilian Real format
+        function formatCurrency(value) {
+            if (!value) return '0,00';
+            
+            // Convert to number if it's a string
+            const numberValue = typeof value === 'string' ? parseFloat(value.replace(/[^\d,]/g, '').replace(',', '.')) : value;
+            
+            // Format with 2 decimal places, dot for thousands and comma for decimals
+            return numberValue.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        // Currency input formatting
+        document.querySelectorAll('.currency-input').forEach(input => {
+            input.addEventListener('focus', function(e) {
+                // Remove formatting on focus
+                let value = e.target.value.replace(/[^\d,]/g, '');
+                e.target.value = value ? parseFloat(value.replace(',', '.')).toString() : '';
+            });
+            
+            input.addEventListener('blur', function(e) {
+                // Apply formatting on blur
+                let value = e.target.value;
+                if (value) {
+                    e.target.value = formatCurrency(value);
+                }
+            });
+        });
+
+        // Function to send simulation via WhatsApp
+        function sendSimulation(phoneNumber) {
+            // Basic validation
+            const phone = document.getElementById('phone').value;
+            const phoneRegex = /^\(\d{2}\) \d{5}-\d{4}$/;
+            
+            if (!phoneRegex.test(phone)) {
+                alert('Por favor, insira um número de telefone válido no formato (00) 00000-0000');
+                return;
+            }
+            
+            // Collect all form data
+            const formData = {
+                nome: document.getElementById('fullName').value,
+                estadoCivil: document.getElementById('maritalStatus').value,
+                maisCompradores: document.getElementById('moreBuyers').value,
+                primeiroImovel: document.getElementById('firstProperty').value,
+                servidorPublico: document.getElementById('publicServant').value,
+                localizacaoImovel: document.getElementById('propertyLocation').value,
+                possuiCorretor: document.getElementById('hasBroker').value,
+                mesesFGTS: document.getElementById('hasFGTS').value,
+                tipoImovel: document.getElementById('propertyType').value,
+                valorImovel: document.getElementById('propertyValue').value,
+                valorFinanciamento: document.getElementById('financingValue').value,
+                rendaFamiliar: document.getElementById('familyIncome').value,
+                dataNascimento: document.getElementById('birthDate').value,
+                telefone: phone,
+                email: document.getElementById('email').value
+            };
+            
+            // Format date for better readability
+            const formattedDate = formData.dataNascimento ? new Date(formData.dataNascimento).toLocaleDateString('pt-BR') : '';
+            
+            // Format currency values
+            const formattedValorImovel = formatCurrency(formData.valorImovel);
+            const formattedValorFinanciamento = formatCurrency(formData.valorFinanciamento);
+            const formattedRendaFamiliar = formatCurrency(formData.rendaFamiliar);
+            
+            // Create WhatsApp message with all information
+            const whatsappMessage = `Olá, gostaria de simular um financiamento imobiliário:%0A%0A` +
+                                  `*DADOS PESSOAIS*%0A` +
+                                  `*Nome:* ${formData.nome}%0A` +
+                                  `*Estado Civil:* ${formData.estadoCivil}%0A` +
+                                  `*Data de Nascimento:* ${formattedDate}%0A` +
+                                  `*Telefone:* ${formData.telefone}%0A` +
+                                  `*E-mail:* ${formData.email}%0A%0A` +
+                                  
+                                  `*SOBRE O IMÓVEL*%0A` +
+                                  `*Tipo do Imóvel:* ${formData.tipoImovel}%0A` +
+                                  `*Localização:* ${formData.localizacaoImovel}%0A` +
+                                  `*Valor do Imóvel:* ${formattedValorImovel}%0A` +
+                                  `*Valor do Financiamento:* ${formattedValorFinanciamento}%0A` +
+                                  `*É o primeiro imóvel?* ${formData.primeiroImovel === 'sim' ? 'Sim' : 'Não'}%0A%0A` +
+                                  
+                                  `*INFORMAÇÕES COMPLEMENTARES*%0A` +
+                                  `*Possui mais de um comprador?* ${formData.maisCompradores === 'sim' ? 'Sim' : 'Não'}%0A` +
+                                  `*É servidor público?* ${formData.servidorPublico === 'sim' ? 'Sim' : 'Não'}%0A` +
+                                  `*Possui corretor?* ${formData.possuiCorretor === 'sim' ? 'Sim' : 'Não'}%0A` +
+                                  `*Tem mais de 36 meses de FGTS?* ${formData.mesesFGTS === 'sim' ? 'Sim' : 'Não'}%0A` +
+                                  `*Renda Familiar:* ${formattedRendaFamiliar}%0A%0A` +
+                                  
+                                  `*Mensagem automática enviada pelo site Supera Correspondente Bancário*`;
+            
+            // Open WhatsApp with pre-filled message
+            window.open(`https://wa.me/${phoneNumber}?text=${whatsappMessage}`, '_blank');
+            
+            // Reset form and close modal
+            alert('Você será redirecionado para o WhatsApp para concluir a simulação. Obrigado!');
+            document.getElementById('simulationModal').style.display = 'none';
+            document.getElementById('simulationForm').reset();
+        }
+    </script>
+</body>
+</html>
