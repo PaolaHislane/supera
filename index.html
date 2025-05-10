@@ -545,7 +545,7 @@
         <div class="container">
             <h2>Nossa Localização</h2>
             <h3>Supera Correspondente Bancário</h3>
-            <p>SIA Trecho 3 Ed.AC Coelho lote 1010 a 1050 Loja 204 - Guará, Brasília - DF, 71200-020</p>
+            <p>SIA Trecho 3 Ed.AC Coelho lote 1010 a 1050 Sala 204 - Guará, Brasília - DF, 71200-020</p>
 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3839.0117522719074!2d-47.963176224112175!3d-15.803334323176783!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935a3053575268a9%3A0x970f6eb4c8098de0!2zQUMgQ29lbGhvIE1hdGVyaWFpcyBQYXJhIENvbnN0cnXDp8OjbyBTSUE6IFBvcmNlbGFuYXRvLCBJbHVtaW5hw6fDo28sIERlY29yYcOnw6NvLCBBY2FiYW1lbnRvcywgVGludGFzLCBCcmFzw61saWEgREY!5e0!3m2!1spt-BR!2sbr!4v1746831059550!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </div>
@@ -575,21 +575,24 @@
                     <strong>Documentos de Identificação (Proponente e Cônjuge)</strong>
                     <ul>
                         <li>RG (Carteira de Identidade)</li>
-                        <li>CPF (caso não conste no RG)</li>
-                        <li>CNH (opcional)</li>
+                        <li>CPF (Caso não conste no RG)</li>
+                        <li>CNH (Opcional)</li>
                     </ul>
                 </li>
                 <li>
                     <strong>Estado Civil</strong>
                     <ul>
                         <li>Certidão de Nascimento</li>
-                        <li>Certidão de Casamento (incluir pacto antenupcial se regime diferente de comunhão parcial)</li>
+                        <li>Certidão de Casamento (Incluir pacto antenupcial se regime diferente de comunhão parcial)</li>
+                        <li>Divorciado (Certidão de casamento + averbação do divórcio)</li>
+                        <li>Viúvo (Certidão de casamento + certidão de óbito)</li>
+                        <li>Escritura de União estável + estado civil listado acima</li>
                     </ul>
                 </li>
                 <li>
                     <strong>Residência</strong>
                     <ul>
-                        <li>Comprovante recente em nome do comprador (frente/verso)</li>
+                        <li>Comprovante recente (Frente/verso)</li>
                         <li>Aceitos: contas de água, luz, TV, telefone, fatura de cartão com data de postagem</li>
                     </ul>
                 </li>
@@ -599,7 +602,7 @@
             
             <h4>OPÇÃO 1 - ASSALARIADOS</h4>
             <ul>
-                <li>Último contracheque (sem 13º ou férias, prazo máximo 60 dias)</li>
+                <li>2 últimos contracheques (sem 13º ou férias, prazo máximo 60 dias)</li>
                 <li>Número do PIS</li>
             </ul>
             
@@ -607,7 +610,7 @@
             <ul>
                 <li>IRPF completo com recibo</li>
                 <li>Retificadora (se houver)</li>
-                <li>Extratos bancários últimos 6 meses (exceto CEF)</li>
+                <li>Extratos bancários últimos 6 meses</li>
             </ul>
             
             <h4>OPÇÃO 3 - RENDA DE ALUGUEL</h4>
@@ -632,7 +635,6 @@
             <h4>OPÇÃO 6 - RENDA INFORMAL</h4>
             <ul>
                 <li>Extratos bancários últimos 6 meses</li>
-                <li>Faturas cartão crédito últimos 6 meses</li>
             </ul>
         </div>
     </div>
@@ -746,7 +748,7 @@
                 
                 <div class="form-group">
                     <label for="birthDate">Data de Nascimento</label>
-                    <input type="date" id="birthDate" name="birthDate" required placeholder="DD/MM/AAAA">
+                    <input type="text" id="birthDate" name="birthDate" required placeholder="DD/MM/AAAA" maxlength="10">
                 </div>
                 
                 <div class="form-group">
@@ -882,6 +884,58 @@
                     e.target.value = !value[2] ? value[1] : '(' + value[1] + ') ' + value[2] + (value[3] ? '-' + value[3] : '');
                 }
             });
+            
+            // Date mask (DD/MM/AAAA)
+            document.getElementById('birthDate').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                
+                if (value.length > 2 && value.length <= 4) {
+                    value = value.replace(/^(\d{2})(\d{0,2})/, '$1/$2');
+                } else if (value.length > 4) {
+                    value = value.replace(/^(\d{2})(\d{2})(\d{0,4})/, '$1/$2/$3');
+                }
+                
+                e.target.value = value;
+            });
+            
+            // Date validation
+            document.getElementById('birthDate').addEventListener('blur', function(e) {
+                const dateRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+                const value = e.target.value;
+                
+                if (!value.match(dateRegex)) {
+                    alert('Por favor, insira uma data válida no formato DD/MM/AAAA');
+                    e.target.focus();
+                    return;
+                }
+                
+                const parts = value.split('/');
+                const day = parseInt(parts[0], 10);
+                const month = parseInt(parts[1], 10);
+                const year = parseInt(parts[2], 10);
+                
+                // Validar dia, mês e ano
+                if (month < 1 || month > 12) {
+                    alert('Mês inválido. Por favor, insira um valor entre 01 e 12.');
+                    e.target.focus();
+                    return;
+                }
+                
+                const daysInMonth = new Date(year, month, 0).getDate();
+                if (day < 1 || day > daysInMonth) {
+                    alert('Dia inválido para o mês especificado.');
+                    e.target.focus();
+                    return;
+                }
+                
+                // Validar ano (por exemplo, não pode ser no futuro)
+                const currentYear = new Date().getFullYear();
+                if (year < 1900 || year > currentYear) {
+                    alert('Ano inválido. Por favor, insira um ano entre 1900 e ' + currentYear + '.');
+                    e.target.focus();
+                    return;
+                }
+            });
         });
         
         // Chat functionality
@@ -965,6 +1019,15 @@
                 return;
             }
             
+            // Validate date format
+            const birthDate = document.getElementById('birthDate').value;
+            const dateRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+            
+            if (!birthDate.match(dateRegex)) {
+                alert('Por favor, insira uma data de nascimento válida no formato DD/MM/AAAA');
+                return;
+            }
+            
             // Collect all form data
             const formData = {
                 nome: document.getElementById('fullName').value,
@@ -979,13 +1042,13 @@
                 valorImovel: document.getElementById('propertyValue').value,
                 valorFinanciamento: document.getElementById('financingValue').value,
                 rendaFamiliar: document.getElementById('familyIncome').value,
-                dataNascimento: document.getElementById('birthDate').value,
+                dataNascimento: birthDate,
                 telefone: phone,
                 email: document.getElementById('email').value
             };
             
-            // Format date for better readability
-            const formattedDate = formData.dataNascimento ? new Date(formData.dataNascimento).toLocaleDateString('pt-BR') : '';
+            // Format date for better readability (already in DD/MM/AAAA format)
+            const formattedDate = formData.dataNascimento;
             
             // Format currency values
             const formattedValorImovel = formatCurrency(formData.valorImovel);
